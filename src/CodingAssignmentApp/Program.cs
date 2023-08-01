@@ -37,7 +37,7 @@ public class Program
         } while (true);
     }
 
-    private static void Display(string? KeyToSearch = null, string? filePath = null)
+    static void Display(string? KeyToSearch = null, string? filePath = null)
     {
         var fileUtility = new FileUtility(new FileSystem());
         var dataList = Enumerable.Empty<Data>();
@@ -83,7 +83,7 @@ public class Program
         }
     }
 
-    private static void Search()
+    static void Search()
     {
         Console.WriteLine("Enter the key to search.");
         var keyToSearch = Console.ReadLine()!;
@@ -98,7 +98,7 @@ public class Program
         Console.WriteLine("\n------------------End of search---------------------\n");
     }
 
-    private static List<string> PopulateAllItemsInDirectory(string dataPath, List<string> result)
+    static List<string> PopulateAllItemsInDirectory(string dataPath, List<string> result)
     {
         var fileUtility = new FileUtility(new FileSystem());
         foreach (var item in Directory.GetFileSystemEntries(dataPath))

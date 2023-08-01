@@ -1,0 +1,10 @@
+<Datas>
+    <Data>
+        <Key>testxml1</Key>
+        <Value>xmlvalue1</Value>
+    </Data>
+    <Data>
+        <Key>testxml2</Key>
+        <Value>xmlvalue2</Value>
+    </Data>
+</Datas>

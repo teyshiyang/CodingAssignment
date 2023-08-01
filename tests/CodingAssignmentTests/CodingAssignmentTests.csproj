@@ -17,7 +17,20 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\CodingAssignmentApp\CodingAssignmentApp.csproj" />
       <ProjectReference Include="..\..\src\CodingAssignmentLib\CodingAssignmentLib.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="testData\testData.csv">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="testData\testData.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="testData\testData.xml">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
