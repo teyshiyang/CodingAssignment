@@ -11,7 +11,7 @@ public class ContentParser : IContentParser
     {
         if (content[1].Contains("csv"))
         {
-            if (string.IsNullOrEmpty(KeyToSearch))
+            if (KeyToSearch == null)
             {
                 return content[0].Split("\n", StringSplitOptions.RemoveEmptyEntries).Select(line =>
                 {
@@ -33,7 +33,7 @@ public class ContentParser : IContentParser
         else if (content[1].Contains("json"))
         {
             var data = JsonSerializer.Deserialize<List<Data>>(content[0])!;
-            if (string.IsNullOrEmpty(KeyToSearch))
+            if (KeyToSearch == null)
             {
                 return data;
             }
@@ -48,7 +48,7 @@ public class ContentParser : IContentParser
             using (var reader = new StringReader(content[0]))
             {
                 DataList data = (DataList)serializer.Deserialize(reader)!;
-                if (string.IsNullOrEmpty(KeyToSearch))
+                if (KeyToSearch == null)
                 {
                     return data.Select(line => { return new Data(line.Key, line.Value); });
                 }

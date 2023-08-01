@@ -110,7 +110,7 @@ public class Program
             }
             else
             {
-                var inner_result = PopulateAllItemsInDirectory(item, result);
+                PopulateAllItemsInDirectory(item, result);
             }
         }
         return result;
