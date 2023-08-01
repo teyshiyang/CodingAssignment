@@ -83,10 +83,12 @@ void Search()
     string path = Directory.GetCurrentDirectory();
     string rootDataPath = Path.GetFullPath(@"..\..\..\", path) + @"data\";
     List<string> allFiles = PopulateAllItemsInDirectory(rootDataPath, new List<string>());
+    Console.WriteLine("\n------------------Search results---------------------\n");
     foreach (var file in allFiles)
     {
         Display(keyToSearch, file);
     }
+    Console.WriteLine("\n------------------End of search---------------------\n");
 }
 
 List<string> PopulateAllItemsInDirectory(string dataPath, List<string> result)
