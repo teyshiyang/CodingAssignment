@@ -42,7 +42,7 @@ public class FileUtilityTests
         var content = _fileUtility.GetContent(filePath1);
         CollectionAssert.AreEqual(new List<string>
         {
-            "aaaaa,bbbbb\nCcCcc,DdddD",".csv"
+            "aaaaa,bbbbb\r\nCcCcc,DdddD",".csv"
         },content);
     }
 
@@ -54,7 +54,7 @@ public class FileUtilityTests
         var content = _fileUtility.GetContent(filePath1);
         CollectionAssert.AreEqual(new List<string>
         {
-            "<Datas>\n    <Data>\n        <Key>testxml1</Key>\n        <Value>xmlvalue1</Value>\n    </Data>\n    <Data>\n        <Key>testxml2</Key>\n        <Value>xmlvalue2</Value>\n    </Data>\n</Datas>",".xml"
+            "<Datas>\r\n    <Data>\r\n        <Key>testxml1</Key>\r\n        <Value>xmlvalue1</Value>\r\n    </Data>\r\n    <Data>\r\n        <Key>testxml2</Key>\r\n        <Value>xmlvalue2</Value>\r\n    </Data>\r\n</Datas>",".xml"
         }, content);
     }
 
