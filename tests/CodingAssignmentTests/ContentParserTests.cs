@@ -83,6 +83,6 @@ public class ContentParserTests
         CollectionAssert.AreEqual(new List<Data>
         {
             new ("testing123", "123testing")
-        }, dataList);s
+        }, dataList);
     }
 }
