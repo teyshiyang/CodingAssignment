@@ -11,14 +11,14 @@ public class FileUtility : IFileUtility
     {
         _fileSystem = fileSystem;
     }
-    
+
     public string GetExtension(string fileName)
     {
         return _fileSystem.FileInfo.New(fileName).Extension;
     }
 
-    public string GetContent(string fileName)
+    public List<string> GetContent(string fileName)
     {
-        return _fileSystem.File.ReadAllText(fileName);
+        return new List<string>() { _fileSystem.File.ReadAllText(fileName), fileName.Substring(fileName.Length - 4) };
     }
 }

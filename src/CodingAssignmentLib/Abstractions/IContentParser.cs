@@ -2,5 +2,5 @@
 
 public interface IContentParser
 {
-    IEnumerable<Data> Parse(string content);
+    IEnumerable<Data> Parse(List<string> content, string KeyToSearch);
 }

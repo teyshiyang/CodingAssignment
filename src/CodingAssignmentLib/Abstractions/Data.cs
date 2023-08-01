@@ -1,4 +1,12 @@
-﻿namespace CodingAssignmentLib.Abstractions;
+﻿using System.Xml.Serialization;
+
+namespace CodingAssignmentLib.Abstractions;
+
+
+[XmlRoot(ElementName = "Datas")]
+public class DataList : List<Data>
+{
+}
 
 public struct Data
 {
@@ -7,6 +15,8 @@ public struct Data
         Key = key;
         Value = value;
     }
-    public string Key { get; }
-    public string Value { get; }
+    [XmlElement("Key")]
+    public string Key { get; set; }
+    [XmlElement("Value")]
+    public string Value { get; set; }
 }

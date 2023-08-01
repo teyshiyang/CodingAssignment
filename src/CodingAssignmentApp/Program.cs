@@ -1,13 +1,14 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Collections.Specialized;
 using System.IO.Abstractions;
 using CodingAssignmentLib;
 using CodingAssignmentLib.Abstractions;
 
-Console.WriteLine("Coding Assignment!");
-
 do
 {
+    Console.WriteLine("\n---------------------------------------\n");
+    Console.WriteLine("Coding Assignment!");
     Console.WriteLine("\n---------------------------------------\n");
     Console.WriteLine("Choose an option from the following list:");
     Console.WriteLine("\t1 - Display");
@@ -29,29 +30,79 @@ do
     }
 } while (true);
 
-
-void Display()
+void Display(string? KeyToSearch = null, string? filePath = null)
 {
-    Console.WriteLine("Enter the name of the file to display its content:");
-
-    var fileName = Console.ReadLine()!;
     var fileUtility = new FileUtility(new FileSystem());
     var dataList = Enumerable.Empty<Data>();
-
-    if (fileUtility.GetExtension(fileName) == ".csv")
+    string filePath1;
+    if (filePath == null)
     {
-        dataList = new CsvContentParser().Parse(fileUtility.GetContent(fileName));
+        Console.WriteLine("Enter the name of the file to display its content:");
+        var item = Console.ReadLine()!;
+        string path = Directory.GetCurrentDirectory();
+        filePath1 = Path.GetFullPath(@"..\..\..\", path) + @"data\" + item;
+    }
+    else
+    {
+        filePath1 = filePath;
     }
 
-    Console.WriteLine("Data:");
-
-    foreach (var data in dataList)
+    if (fileUtility.GetExtension(filePath1) == ".csv" || fileUtility.GetExtension(filePath1) == ".xml" || fileUtility.GetExtension(filePath1) == ".json")
     {
-        Console.WriteLine($"Key:{data.Key} Value:{data.Value}");
+        dataList = new ContentParser().Parse(fileUtility.GetContent(filePath1), KeyToSearch);
+    }
+    else
+    {
+        Console.WriteLine("Please enter valid file extension type of : .csv, .json, .xml");
+        Console.WriteLine("Press anything and enter to try again");
+        var temp = Console.ReadLine()!;
+        return;
+    }
+
+    if (dataList.Count() > 0 && filePath == null)
+    {
+        Console.WriteLine("Data:");
+        foreach (var data in dataList)
+        {
+            Console.WriteLine($"Key:{data.Key} Value:{data.Value}");
+        }
+    }
+    else if (dataList.Count() > 0 && filePath != null)
+    {
+        foreach (var data in dataList)
+        {
+            Console.WriteLine($"Key:{data.Key} Value:{data.Value} FileName:{filePath!.Split(@"CodingAssignmentApp\").LastOrDefault()}");
+        }
     }
 }
 
 void Search()
 {
     Console.WriteLine("Enter the key to search.");
+    var keyToSearch = Console.ReadLine()!;
+    string path = Directory.GetCurrentDirectory();
+    string rootDataPath = Path.GetFullPath(@"..\..\..\", path) + @"data\";
+    List<string> allFiles = PopulateAllItemsInDirectory(rootDataPath, new List<string>());
+    foreach (var file in allFiles)
+    {
+        Display(keyToSearch, file);
+    }
+}
+
+List<string> PopulateAllItemsInDirectory(string dataPath, List<string> result)
+{
+    var fileUtility = new FileUtility(new FileSystem());
+    foreach (var item in Directory.GetFileSystemEntries(dataPath))
+    {
+        FileAttributes attribute = File.GetAttributes(item);
+        if (fileUtility.GetExtension(item) == ".csv" || fileUtility.GetExtension(item) == ".xml" || fileUtility.GetExtension(item) == ".json")
+        {
+            result.Add(item.Trim());
+        }
+        else
+        {
+            var inner_result = PopulateAllItemsInDirectory(item, result);
+        }
+    }
+    return result;
 }

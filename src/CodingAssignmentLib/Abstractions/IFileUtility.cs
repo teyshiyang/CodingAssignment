@@ -3,5 +3,5 @@
 public interface IFileUtility
 {
     string GetExtension(string fileName);
-    string GetContent(string fileName);
+    List<string> GetContent(string fileName);
 }
