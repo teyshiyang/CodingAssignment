@@ -30,11 +30,21 @@ public class ContentParserTests
     public void Parse_ReturnSearchedDataCsv()
     {
         List<string> content = new List<String>() { "aaaaA,bbbbb" + "\n" + "Ccccc,dddddd" + "\n", ".csv" };
-        //Search by all caps
         var dataList = _sut.Parse(content, "AAAAA");
 
-        //Returns matching content regardless of text casing
         CollectionAssert.AreEqual(new List<Data>
+        {
+            new ("aaaaA", "bbbbb")
+        }, dataList);
+    }
+
+    [Test]
+    public void Parse_ReturnSearchedDataCsv_False()
+    {
+        List<string> content = new List<String>() { "aaaaA,bbbbb" + "\n" + "Ccccc,dddddd" + "\n", ".csv" };
+        var dataList = _sut.Parse(content, "Ccccc");
+
+        CollectionAssert.AreNotEqual(new List<Data>
         {
             new ("aaaaA", "bbbbb")
         }, dataList);
@@ -64,6 +74,17 @@ public class ContentParserTests
     }
 
     [Test]
+    public void Parse_ReturnSearchedDataJson_False()
+    {
+        List<string> content = new List<String>() { @"[{""Key"":""abc123"",""Value"":""123abc""},{""Key"":""cba321"",""Value"":""321cba""}]", "json" };
+        var dataList = _sut.Parse(content, "cba321");
+        CollectionAssert.AreNotEqual(new List<Data>
+        {
+            new ("abc123", "123abc")
+        }, dataList);
+    }
+
+    [Test]
     public void Parse_ReturnWholeDataXml()
     {
         List<string> content = new List<String>() { "<Datas>\n    <Data>\n        <Key>testing123</Key>\n        <Value>123testing</Value>\n    </Data>\n    <Data>\n        <Key>XmlCase1</Key>\n        <Value>Case1Xml</Value>\n    </Data>\n    </Datas>", ".xml" };
@@ -81,6 +102,17 @@ public class ContentParserTests
         List<string> content = new List<String>() { "<Datas>\n    <Data>\n        <Key>testing123</Key>\n        <Value>123testing</Value>\n    </Data>\n    <Data>\n        <Key>XmlCase1</Key>\n        <Value>Case1Xml</Value>\n    </Data>\n    </Datas>", ".xml" };
         var dataList = _sut.Parse(content, "TesTinG123");
         CollectionAssert.AreEqual(new List<Data>
+        {
+            new ("testing123", "123testing")
+        }, dataList);
+    }
+
+    [Test]
+    public void Parse_ReturnSearchedDataXml_False()
+    {
+        List<string> content = new List<String>() { "<Datas>\n    <Data>\n        <Key>testing123</Key>\n        <Value>123testing</Value>\n    </Data>\n    <Data>\n        <Key>XmlCase1</Key>\n        <Value>Case1Xml</Value>\n    </Data>\n    </Datas>", ".xml" };
+        var dataList = _sut.Parse(content, "XmlCase1");
+        CollectionAssert.AreNotEqual(new List<Data>
         {
             new ("testing123", "123testing")
         }, dataList);
