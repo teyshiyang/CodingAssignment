@@ -13,20 +13,20 @@ public class ContentParser : IContentParser
         {
             if (KeyToSearch == null)
             {
-                return content[0].Split("\n", StringSplitOptions.RemoveEmptyEntries).Select(line =>
+                return content[0].Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(line =>
                 {
                     var items = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    return new Data(items[0], items[1].Replace("\r", ""));
+                    return new Data(items[0], items[1]);
                 });
             }
             else
             {
-                return content[0].Split("\n", StringSplitOptions.RemoveEmptyEntries)
+                return content[0].Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
                     .Where(line => line.Split(',', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()!.ToLower() == KeyToSearch.ToLower())
                     .Select(line =>
                     {
                         var items = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                        return new Data(items[0], items[1].Replace("\r",""));
+                        return new Data(items[0], items[1]);
                     });
             }
         }
