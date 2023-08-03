@@ -16,7 +16,7 @@ public class ContentParser : IContentParser
                 return content[0].Split("\n", StringSplitOptions.RemoveEmptyEntries).Select(line =>
                 {
                     var items = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                    return new Data(items[0], items[1]);
+                    return new Data(items[0], items[1].Replace("\r", ""));
                 });
             }
             else
@@ -26,7 +26,7 @@ public class ContentParser : IContentParser
                     .Select(line =>
                     {
                         var items = line.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                        return new Data(items[0], items[1]);
+                        return new Data(items[0], items[1].Replace("\r",""));
                     });
             }
         }
