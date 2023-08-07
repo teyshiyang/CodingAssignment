@@ -9,32 +9,46 @@ namespace CodingAssignmentApp;
 
 public class Program
 {
-    public static void Main()
+    static int ExitCode = 0;
+    public static int Main()
     {
-        do
+        try
         {
-            Console.WriteLine("\n---------------------------------------\n");
-            Console.WriteLine("Coding Assignment!");
-            Console.WriteLine("\n---------------------------------------\n");
-            Console.WriteLine("Choose an option from the following list:");
-            Console.WriteLine("\t1 - Display");
-            Console.WriteLine("\t2 - Search");
-            Console.WriteLine("\t3 - Exit");
-
-            switch (Console.ReadLine())
+            do
             {
-                case "1":
-                    Display();
-                    break;
-                case "2":
-                    Search();
-                    break;
-                case "3":
-                    return;
-                default:
-                    return;
+                Console.WriteLine("\n---------------------------------------\n");
+                Console.WriteLine("Coding Assignment!");
+                Console.WriteLine("\n---------------------------------------\n");
+                Console.WriteLine("Choose an option from the following list:");
+                Console.WriteLine("\t1 - Display");
+                Console.WriteLine("\t2 - Search");
+                Console.WriteLine("\t3 - Exit");
+
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        Display();
+                        break;
+                    case "2":
+                        Search();
+                        break;
+                    case "3":
+                        return ExitCode;
+                    default:
+                        return Main();
+                }
+            } while (true);
+        }
+        catch(Exception ex)
+        {
+            while (ex.InnerException != null)
+            {
+                ex = ex.InnerException;
             }
-        } while (true);
+            ExitCode = -1;
+            Console.WriteLine(ex);
+            return ExitCode;
+        }
     }
 
     static void Display(string? KeyToSearch = null, string? filePath = null)
@@ -46,15 +60,14 @@ public class Program
         {
             Console.WriteLine("Enter the name of the file to display its content:");
             var item = Console.ReadLine()!;
-            string path = Directory.GetCurrentDirectory();
-            filePath1 = Path.GetFullPath(@"..\..\..\", path) + @"data\" + item;
+            filePath1 = Path.GetFullPath(@"..\..\..\", Directory.GetCurrentDirectory()) + @"data\" + item;
         }
         else
         {
             filePath1 = filePath;
         }
 
-        if (fileUtility.GetExtension(filePath1) == ".csv" || fileUtility.GetExtension(filePath1) == ".xml" || fileUtility.GetExtension(filePath1) == ".json")
+        if (FileUtility.IsSupportedFile(fileUtility.GetExtension(filePath1)))
         {
             dataList = new ContentParser().Parse(fileUtility.GetContent(filePath1), KeyToSearch);
         }
@@ -87,14 +100,17 @@ public class Program
     {
         Console.WriteLine("Enter the key to search.");
         var keyToSearch = Console.ReadLine()!;
-        string path = Directory.GetCurrentDirectory();
-        string rootDataPath = Path.GetFullPath(@"..\..\..\", path) + @"data\";
+        string rootDataPath = Path.GetFullPath(@"..\..\..\", Directory.GetCurrentDirectory()) + @"data\";
         List<string> allFiles = PopulateAllItemsInDirectory(rootDataPath, new List<string>());
         Console.WriteLine("\n------------------Search results---------------------\n");
-        foreach (var file in allFiles)
+        //foreach (var file in allFiles)
+        //{
+        //    Display(keyToSearch, file);
+        //}
+        Parallel.ForEach(allFiles, file =>
         {
             Display(keyToSearch, file);
-        }
+        });
         Console.WriteLine("\n------------------End of search---------------------\n");
     }
 
@@ -104,7 +120,7 @@ public class Program
         foreach (var item in Directory.GetFileSystemEntries(dataPath))
         {
             FileAttributes attribute = File.GetAttributes(item);
-            if (fileUtility.GetExtension(item) == ".csv" || fileUtility.GetExtension(item) == ".xml" || fileUtility.GetExtension(item) == ".json")
+            if (FileUtility.IsSupportedFile(fileUtility.GetExtension(item)))
             {
                 result.Add(item.Trim());
             }

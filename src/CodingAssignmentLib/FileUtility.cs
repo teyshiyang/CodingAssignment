@@ -19,6 +19,25 @@ public class FileUtility : IFileUtility
 
     public List<string> GetContent(string fileName)
     {
-        return new List<string>() { _fileSystem.File.ReadAllText(fileName), fileName.Substring(fileName.Length - 4) };
+        try
+        {
+            return new List<string>() { _fileSystem.File.ReadAllText(fileName), _fileSystem.FileInfo.New(fileName).Extension.Trim('.') };
+        }
+        catch(Exception ex)
+        {
+            throw new FileNotFoundException($"File is not found {fileName}");
+        }
+    }
+
+    public static bool IsSupportedFile(string fileExtension)
+    {
+        return Enum.IsDefined(typeof(FileUtility.SupportedFiles), fileExtension.Trim('.'));
+    }
+
+    public enum SupportedFiles
+    {
+        csv,
+        xml,
+        json
     }
 }

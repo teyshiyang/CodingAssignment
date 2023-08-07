@@ -9,7 +9,7 @@ public class ContentParser : IContentParser
 {
     public IEnumerable<Data> Parse(List<string> content, string? KeyToSearch = null)
     {
-        if (content[1].Contains("csv"))
+        if (content[1] == FileUtility.SupportedFiles.csv.ToString())
         {
             if (KeyToSearch == null)
             {
@@ -30,7 +30,7 @@ public class ContentParser : IContentParser
                     });
             }
         }
-        else if (content[1].Contains("json"))
+        else if (content[1] == FileUtility.SupportedFiles.json.ToString())
         {
             var data = JsonSerializer.Deserialize<List<Data>>(content[0])!;
             if (KeyToSearch == null)
@@ -42,7 +42,7 @@ public class ContentParser : IContentParser
                 return data.Where(x => x.Key.ToLower() == KeyToSearch.ToLower());
             }
         }
-        else if (content[1].Contains("xml"))
+        else if (content[1] == FileUtility.SupportedFiles.xml.ToString())
         {
             XmlSerializer serializer = new XmlSerializer(typeof(DataList));
             using (var reader = new StringReader(content[0]))
